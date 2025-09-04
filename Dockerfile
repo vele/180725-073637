@@ -1,4 +1,3 @@
-# Build stage
 FROM golang:1.21 AS builder
 
 WORKDIR /app
@@ -9,13 +8,11 @@ COPY src/main.go ./
 RUN go mod tidy
 RUN CGO_ENABLED=0 GOOS=linux go build -o internal-service main.go
 
-# Run stage
 FROM gcr.io/distroless/base-debian12
 
 WORKDIR /app
 COPY --from=builder /app/internal-service .
 
-# Use non-root user for security
 USER 65532:65532
 
 EXPOSE 8080

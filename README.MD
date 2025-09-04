@@ -178,3 +178,27 @@ kubectl get all | grep internal-service
 ```bash
 kind delete cluster --name internal-services
 ```
+
+# Extra: Makefile
+```bash
+# Build & push Docker image
+make docker-push
+
+# Deploy dev with Helm
+make deploy-dev
+
+# Deploy prod with Helm
+make deploy-prod
+
+# Render manifests for GitOps
+make render
+
+# Apply GitOps dev overlay
+make apply-dev
+
+# Cleanup all internal-service resources
+make clean
+
+# Full reset of kind cluster
+make reset-cluster
+```
