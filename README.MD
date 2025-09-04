@@ -89,6 +89,39 @@ helm install internal-service-prod ./internal-service \
   --set image.repository=mhristov/internal-service \
   --set image.tag=latest
 ```
+- #  Usage Examples
+- Install with the example values
+```bash
+helm install internal-service ./internal-service -f values-example.yaml
+```
+- Upgrade with the example values
+```bash
+helm upgrade --install internal-service ./internal-service -f values-example.yaml
+```
+- # Example Helm Install with --set
+```bash
+helm upgrade --install internal-service ./internal-service \
+  --set image.hub=docker.io \
+  --set image.repository=mhristov/internal-service \
+  --set image.tag=latest \
+  --set prod=true \
+  --set env.LOG_LEVEL=debug \
+  --set env.FEATURE_FLAG=enabled \
+  --set env.CUSTOM_MESSAGE="Hello from Milen ;-)" \
+  --set resources.requests.cpu=200m \
+  --set resources.requests.memory=256Mi \
+  --set resources.limits.cpu=500m \
+  --set resources.limits.memory=512Mi \
+  --set autoscaling.enabled=true \
+  --set autoscaling.minReplicas=3 \
+  --set autoscaling.maxReplicas=10 \
+  --set autoscaling.targetCPUUtilizationPercentage=75 \
+  --set securityContext.runAsNonRoot=true \
+  --set securityContext.runAsUser=1000 \
+  --set securityContext.readOnlyRootFilesystem=true \
+  --set securityContext.allowPrivilegeEscalation=false
+```
+
 - # Upgrade if release already exists:
 ```bash
 helm template internal-service ./internal-service > gitops/base/internal-service.yaml
@@ -126,4 +159,22 @@ App: http://localhost:8080
 
 Health: http://localhost:8080/healthz
  → returns ok
- 
+ ---
+ # Cleanup / Reset
+ - Delete Helm releases
+ ```bash
+helm uninstall internal-service
+helm uninstall internal-service-prod
+```
+- Delete all app resources manually (if any left)
+```bash
+kubectl delete all -l app=internal-service
+```
+- Check nothing remains
+```bash
+kubectl get all | grep internal-service
+```
+- Delete entire cluster (full reset)
+```bash
+kind delete cluster --name internal-services
+```
