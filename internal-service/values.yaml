@@ -1,0 +1,36 @@
+replicaCount: 3
+
+image:
+  hub: docker.io
+  repository: mhristov/internal-service 
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+prod: false
+
+env: {} 
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 256Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+
+service:
+  type: ClusterIP
+  port: 8080
+
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: false
+

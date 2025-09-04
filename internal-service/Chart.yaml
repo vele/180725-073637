@@ -1,0 +1,6 @@
+apiVersion: v2
+name: internal-service
+description: A helm chart for deploying web service
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
